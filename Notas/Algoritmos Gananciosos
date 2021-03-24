@@ -1,0 +1,131 @@
+### Algoritmos Gananciosos ##
+
+Qualquer algoritmo que aplica uma heuristica de solucao em que se tenta realizar
+uma escolha otima local em todo e cada estagio da solucao
+Aplicavel a problemas de minimizacao ou maximizacao
+Em diversos problemas (mas nao em todos), a optimizacao local garante tambem 
+otimizacao global, permitindo encontrar a solucao otima de forma eficiente
+
+Subestrutura otima: problema para o qual uma solucao otima contem solucoes otimas
+para os seus subproblemas
+
+
+### Estrategia Ganaciosa ###
+
+Um algoritmo ganancioso funciona por fases. A cada fase verifica-se o seguinte:
+  1. E escolhida a melhor opcao que se pode obter no momento, sem considerar as 
+     consequencias futuras para o resultado final
+  2. Por se ter escolhido um optimo local a cada passo, espera-se obter um otimo 
+     global
+
+Observacoes:
+  1. E sempre seguro escolher um algortimo ganancioso, pois dentro de um grupo de
+     solucoes, podemos sempre escolher a melhor, com base num criterio definido
+     a priori.
+
+
+### Componentes de um Algoritmo Ganancioso ###
+
+  1. Um cojunto de candidatos, de onde a solucao e criada
+  2. Uma funcao de selecao, que escolhe o melhor candidato a ser incluido na 
+     solucao
+  3. Uma funcao de viabilidade, que determina se o candidato podera ou nao fazer 
+     parte da solucao
+  4. Uma funcao objetivo, que atribui um valor a uma solucao final ou parcial
+  5. Uma funcao solucao, que determinara se, e quando, se tera chegado a solucao 
+     completa do problema
+
+
+### Algoritmo Abstrato ###
+
+Inicialmente o conjunto de itens esta vazio.
+A cada passo:
+  - Um item sera adicionado ao conjunto solucao, pela funcao de selecao
+  - Se o conjunto se tornar inviavel, entao rejeita-se os itens em consideracao, 
+    e os mesmos nao voltarao a ser selecionados
+  - Caso contrario, conjunto solucao ainda e viavel, e os itens considerados sao 
+    adicionados
+
+
+### Problema do Troco ###
+
+Problema-exemplo.
+Temos uma maquina que precisa de dar troco a um cliente. Como o fazer de forma 
+a garantir que e dado o menor numero possivel de moedas?
+
+Algoritmo Ganancioso: a cada passo, tentar dar a maior moeda em posse pela maquina
+                      Se o montante atual for inferior, passar para a maior
+                      moeda menor do que a moeda em estudo atualmente.
+                      Continuar ate o montante ser coberto.
+
+
+### Prova de optimalidade - Problema do Troco ###
+
+Definicao: um sitema de moedas diz-se canonico se o algoritmo ganancioso para o
+           problema do troco encontra sempre uma solucao otima (com stock
+           ilimitado)
+
+Teorema: Sendo C = {1, c2, ..., cn} as denominacoes do sistema de moedas, se o
+         sistema nao for canonico, o menor contra-exemplo situa-se na gama 
+         c3 + 1 < x < cn-1 + cn
+         - Logo, basta fazer pesquisa exaustiva nesta gama para determinar se é 
+         canonico.
+
+
+### Escalonamento de atividades ###
+
+Problema-exemplo
+Dado um conjunto de atividades, encontrar um subconjunto com o maior numero de 
+atividades nao sobrepostas
+
+Input: Conjunto de n atividades, a1, a2, ..., an
+       si = inicio da atividade i
+       fi = fim da atividade i
+
+Passos:
+  1. Considerar as atividades numa ordem especifica
+  2. Escolher a melhor opcao de atividade
+  3. Descartar as atividades incompativeis com a atividade escolhida
+  4, Proceder da mesma forma para as atividades restantes
+
+Estrategias:
+  - Fim mais cedo - ascendente em fi
+  - Inicio mais cedo - ascendente em si
+  - Intervalo mais curto - ascendente em fi - si
+  - Menor numero de conflitos - ordenar pelo numero de conflitos
+
+
+
+### Prova de optimalidade - Escalonamento de atividades ###
+
+Sejam:
+  - A - conjunto inicial de atividades
+  - a - atividade selecionada com fim mais cedo
+  - I - conjunto de atividades incompativeis com a
+  - C - conjunto de atividades restantes
+
+Do conjunto {a} U I so pode ser selecionada no maximo uma atividade, pois sao 
+mutualmente incompativeis (com outro criterio poderiam nao ser)
+
+Desse conjunto, escolhemos uma, que e o maximo possivel.
+
+A atividade escolhida (a) nao tem incompatibilidade com as restantes (C), logo,
+a escolha de a permite maximizar o numero de atividades que se podem escolher de 
+C.
+
+
+### Escalonamento de Atividades - Minimizar o tempo medio de conclusao ###
+
+Variacao do problema de escalonamento de atividades
+
+Dados:    tarefas e respetiva duracao
+Objetivo: sequenciar tarefas minimizando o tempo medio de conclusao
+Metodo:   executar tarefas mais curtas primeiro
+
+Calculo do tempo medio de conclusao: (f1 + f2 + ... + fn)/n, sendo fi o tempo 
+                                     decorrido desde o inicio da primeira tarefa 
+                                     ate ao termino da tarefa i.
+
+ 			 	     ((n+1)Ei=1,n di - Ei=1,n i*di)/n
+
+Se existe x > y tal que dx < dy, troca de jx e jy diminui o custo da solucao
